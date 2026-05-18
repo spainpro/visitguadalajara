@@ -1,0 +1,16 @@
+{
+  "name": "Mapa de municipios de Guadalajara",
+  "short_name": "Guadalajara mapa",
+  "start_url": "./guadalajara_clickable_svg_map.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#008000",
+  "description": "Mapa interactivo de municipios de la provincia de Guadalajara para registrar visitas y explorar.",
+  "icons": [
+    {
+      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAA1BMVEX///+nxBvIAAAAJUlEQVR4nO3BMQEAAADCIPunv2HTBBdEAAAAAAAAAAAAAAAAAAAAAAAAAADwFUwYAAEEZ8HYAAAAASUVORK5CYII=",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
