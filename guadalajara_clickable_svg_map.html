@@ -44,6 +44,27 @@
     padding: 6px 10px;
     font-size: 14px;
   }
+
+  /* Mobile optimisation: on narrow screens, fix the controls bar at the bottom and
+     provide extra margin for the map so that it is not obscured. This improves
+     usability on phones and when the page is opened inside apps like Telegram
+     or WhatsApp where the browser chrome cannot be hidden. */
+  @media (max-width: 600px) {
+    #controlsContainer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #ccc;
+      z-index: 1000;
+      max-height: 50vh;
+      overflow-y: auto;
+    }
+    #mapContainer {
+      margin-bottom: 200px; /* leave space for the controls bar */
+    }
+  }
 </style>
 <!-- The map uses a custom pan/zoom implementation written below, so no external
      libraries are needed. -->
@@ -58,6 +79,8 @@
     <div class='controls-row' id='row-actions' style='display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;'>
       <button onclick='exportVisits()'>Exportar&nbsp;JSON</button>
       <button onclick='exportVisitsCSV()'>Exportar&nbsp;CSV</button>
+      <button onclick='exportSVG()'>Exportar&nbsp;SVG</button>
+      <button onclick='shareProgress()'>Compartir</button>
       <button onclick="document.getElementById('importFile').click()">Importar</button>
       <input type='file' id='importFile' accept='.json,.csv' style='display:none' onchange='importVisits(event)' />
       <button onclick='exportImage()'>Descargar&nbsp;imagen</button>
@@ -76,7 +99,7 @@
 <!-- Leyenda de comarcas -->
 <div id='legend' style='margin:8px 0; display:flex; flex-wrap:wrap; justify-content:center; gap:10px; font-size:12px;'></div>
 <div id='mapContainer'>
-<svg id='svgMap' width='800' height='468' viewBox='0 0 800 468' xmlns='http://www.w3.org/2000/svg'>
+<svg id='svgMap' width='800' height='468' viewBox='0 0 800 468' data-original-viewbox='0 0 800 468' xmlns='http://www.w3.org/2000/svg'>
   <g id='municipios'>
     <path d='M416.19,192.00L416.28,192.59L416.72,192.77L417.53,193.04L417.97,192.97L419.28,193.04L419.55,193.10L419.94,193.26L420.64,193.22L421.49,193.23L423.38,193.42L424.01,193.53L425.21,193.86L426.63,194.05L428.03,194.70L429.34,195.38L429.52,195.64L430.12,196.35L430.20,196.55L430.33,196.95L430.61,197.25L430.94,197.71L431.20,198.30L431.25,198.62L431.15,199.28L430.67,200.45L430.22,201.28L429.62,201.29L429.14,201.37L429.07,201.73L428.90,201.88L428.69,201.95L428.60,202.39L429.89,203.34L431.04,203.91L431.25,204.10L431.49,204.58L431.99,205.71L432.06,205.95L432.43,208.28L432.73,209.00L433.23,210.19L433.70,211.67L434.20,213.51L433.98,213.91L433.93,214.08L433.98,214.27L434.00,215.31L436.05,215.74L437.16,215.87L438.43,216.44L439.49,216.80L440.62,218.60L440.73,218.55L441.08,218.20L441.87,217.17L441.98,217.06L444.91,215.93L447.37,216.13L447.65,216.10L448.21,216.13L448.33,216.08L450.62,214.33L450.74,214.14L450.84,213.71L451.52,212.97L452.66,211.69L453.74,210.57L454.95,209.25L455.19,209.08L455.62,208.83L456.31,208.52L458.16,207.52L459.74,207.18L460.63,207.02L462.15,206.59L462.82,206.66L463.49,206.81L464.85,207.15L465.31,207.24L466.09,207.93L467.76,209.01L468.07,209.28L469.49,210.31L470.03,211.18L470.68,211.74L471.58,212.62L471.87,212.86L473.46,213.83L474.53,214.48L475.41,215.16L476.11,215.77L476.42,215.69L476.62,215.58L476.93,215.35L477.13,215.30L476.62,214.81L476.24,214.55L476.18,213.91L476.03,213.27L476.06,213.16L476.15,213.09L476.56,212.99L477.14,212.92L477.30,212.81L477.86,212.33L477.93,212.18L477.86,212.07L477.66,211.82L477.65,211.69L477.70,211.59L478.19,211.11L478.50,210.89L478.85,210.73L479.17,210.62L479.55,210.41L479.75,210.19L479.78,210.08L479.74,209.98L479.45,209.73L479.09,209.49L478.53,208.91L478.30,208.70L478.52,208.44L478.96,208.12L479.46,207.88L479.60,207.85L479.74,207.90L480.16,208.39L480.31,208.53L480.44,208.60L480.65,208.60L480.79,208.53L481.13,208.14L482.44,206.90L482.58,206.73L482.59,206.30L482.54,206.08L482.23,205.51L482.18,205.35L482.29,205.06L482.40,204.85L482.77,204.39L483.04,203.60L483.16,203.48L483.39,203.42L484.24,203.43L484.36,203.40L484.61,203.20L484.78,202.98L484.85,202.84L484.82,202.70L484.48,202.48L483.09,201.67L482.94,201.55L482.81,201.12L482.86,200.93L482.99,200.86L483.75,200.70L484.07,200.40L484.10,200.23L484.00,199.93L483.84,199.83L483.53,199.71L483.34,199.60L483.21,199.35L483.24,198.96L482.10,198.74L478.40,197.92L475.02,197.74L473.47,197.51L468.58,196.80L468.26,196.75L467.84,196.66L467.21,196.64L466.13,196.56L465.45,196.43L465.00,196.37L463.67,196.28L462.01,196.29L461.74,196.21L460.68,195.80L460.41,195.21L459.94,194.38L459.61,193.96L459.35,193.54L458.29,193.11L457.45,192.71L456.44,191.48L455.95,190.96L455.46,190.44L455.11,189.98L453.61,188.22L452.61,186.87L452.46,186.58L452.31,186.14L452.24,184.77L452.03,184.69L451.57,184.44L451.27,184.17L450.03,183.32L449.50,183.04L449.19,182.79L447.98,181.66L447.40,181.01L447.17,180.69L446.39,179.28L445.25,176.95L445.03,176.60L444.17,176.99L443.63,177.58L443.36,177.97L443.16,178.35L442.94,178.55L442.10,179.10L440.00,180.55L438.67,181.62L436.21,182.37L435.49,182.54L434.60,183.27L434.16,183.72L432.60,184.08L432.03,184.26L429.66,184.85L429.42,184.92L428.47,185.59L428.27,185.70L427.47,185.93L424.94,186.96L424.60,187.08L424.45,187.16L423.06,188.90L422.32,189.77L421.82,190.42L421.08,190.84L420.49,191.15L419.59,191.54L416.80,192.20L416.19,192.00Z' fill='#CCCCCC' stroke='#333333' stroke-width='0.3' data-name='Sacecorbo' data-visited='false' style='cursor:pointer'></path>
     <path d='M135.72,68.24L135.71,68.84L135.62,69.14L134.82,71.00L135.45,70.77L135.75,70.76L136.15,71.18L137.03,71.93L137.01,72.19L136.87,72.36L136.10,72.63L136.07,72.81L136.32,72.94L137.29,73.12L138.26,73.11L138.54,73.23L138.57,73.35L138.53,73.50L138.28,74.05L138.35,74.27L138.84,74.63L138.92,74.72L138.47,75.21L138.57,75.41L138.69,75.56L138.98,75.71L139.47,75.91L139.59,75.99L139.72,76.23L139.64,76.36L139.52,76.44L138.94,76.69L138.46,76.99L138.20,77.34L138.13,77.52L138.14,77.66L138.21,77.80L138.32,77.91L139.00,78.38L139.11,78.56L138.98,78.81L138.84,78.91L138.66,78.98L136.58,79.29L135.94,79.48L135.93,79.54L136.32,79.74L137.45,80.16L138.77,80.82L138.90,80.92L138.92,81.07L138.84,81.17L138.69,81.28L138.11,81.32L137.90,81.74L137.94,82.21L138.65,83.08L138.92,83.09L139.18,82.34L139.31,82.22L139.96,82.08L140.25,82.20L140.38,82.29L140.47,82.42L140.52,82.59L140.49,83.07L140.42,83.30L140.31,83.43L139.50,84.17L138.96,84.81L138.93,84.96L139.02,85.11L139.13,85.23L139.24,85.32L139.84,85.36L141.03,84.99L141.25,84.89L141.38,84.88L141.46,84.96L141.44,85.13L141.39,85.34L141.39,85.48L141.51,85.65L142.02,85.89L142.27,86.07L142.47,86.23L142.62,86.44L142.69,86.63L142.72,86.83L142.67,87.02L142.35,87.42L142.03,87.95L142.01,88.11L142.53,89.94L142.53,90.01L142.46,90.08L142.31,90.08L141.92,89.93L141.62,89.86L141.40,89.83L141.03,89.96L140.91,90.06L140.82,90.31L141.03,90.43L141.89,90.58L142.32,90.72L142.86,90.87L142.99,91.07L142.98,91.40L143.03,91.83L143.11,92.08L143.06,92.35L142.97,92.41L142.30,92.52L141.85,92.64L141.72,92.74L141.62,92.93L141.46,93.60L141.39,94.13L141.51,94.43L141.64,94.46L141.79,94.44L142.00,94.37L142.23,94.26L142.88,93.86L143.12,93.82L143.47,93.82L143.75,93.92L144.01,94.09L144.66,94.31L144.94,94.54L145.03,94.74L145.11,95.01L145.05,95.37L144.97,95.57L144.87,95.70L144.59,95.96L144.03,96.33L143.74,96.57L143.58,96.80L143.42,97.70L143.41,98.38L143.44,98.94L143.66,99.65L143.90,99.95L144.31,100.34L144.40,99.91L144.51,99.13L144.60,98.87L144.82,98.56L145.67,97.68L146.16,97.42L146.48,96.76L146.96,95.96L147.37,95.49L147.50,95.12L147.63,94.92L148.02,94.49L148.60,94.03L149.70,93.58L150.44,93.05L150.82,93.06L151.10,92.98L151.77,92.89L152.90,92.70L153.34,92.56L153.86,92.48L154.89,92.57L155.48,92.28L156.46,91.95L156.82,91.78L157.32,91.35L157.46,91.12L157.54,90.89L157.62,90.28L157.57,90.08L157.38,89.71L157.40,89.55L157.75,89.12L157.93,88.82L157.94,88.44L157.88,88.10L157.52,87.67L157.36,86.94L157.41,86.34L157.37,86.18L156.97,85.62L156.19,83.80L156.13,83.24L155.98,82.73L155.63,82.11L155.37,81.48L155.03,80.77L155.16,80.27L155.04,79.26L155.24,78.39L156.24,77.39L156.48,76.68L156.53,76.45L156.88,76.31L159.59,74.90L159.76,74.76L160.13,74.22L160.75,73.55L161.33,72.75L161.60,71.88L161.65,71.51L161.51,70.71L161.57,70.22L161.42,69.99L161.11,69.81L160.14,68.75L159.87,68.02L159.53,67.58L160.10,67.21L160.83,66.44L161.05,66.09L161.60,65.45L161.81,65.06L161.80,64.93L161.46,64.48L161.19,64.03L160.87,63.47L159.35,63.11L157.50,62.36L157.14,62.32L155.61,62.37L155.09,62.42L153.97,62.79L153.39,62.95L152.52,63.09L151.03,60.68L150.99,60.36L150.93,59.19L151.09,58.08L150.68,58.10L148.36,57.95L144.73,56.24L142.69,56.39L141.41,56.44L141.03,56.48L140.16,56.45L139.68,56.41L138.85,56.59L138.58,57.46L138.38,58.35L138.21,58.92L137.68,60.97L134.67,64.03L134.69,64.05L134.44,64.35L134.37,66.22L134.34,66.47L134.17,67.21L135.72,68.24Z' fill='#CCCCCC' stroke='#333333' stroke-width='0.3' data-name='La Huerce' data-visited='false' style='cursor:pointer'></path>
@@ -700,6 +723,366 @@ let visitedColour = '#008000';
 let unvisitedColour = '#CCCCCC';
 let strokeWidth = 0.3;
 
+// --- Comarcas assignment ---
+// Map each municipality to one of four comarcas. This mapping was derived
+// heuristically from the geographic coordinates of the official GeoJSON. It
+// groups municipalities into La Alcarria, Campiña, Serranía de Guadalajara
+// and Señorío de Molina. If a name is not present, it falls back to a
+// neutral stroke colour.
+const municipioToComarca = {
+  "Ablanque": "senorio",
+  "Abánades": "alcarria",
+  "Adobes": "senorio",
+  "Alaminos": "alcarria",
+  "Alarilla": "campina",
+  "Albalate de Zorita": "alcarria",
+  "Albares": "alcarria",
+  "Albendiego": "serrania",
+  "Alcocer": "alcarria",
+  "Alcolea de las Peñas": "serrania",
+  "Alcolea del Pinar": "serrania",
+  "Alcoroches": "senorio",
+  "Aldeanueva de Guadalajara": "alcarria",
+  "Aldovera": "alcarria",
+  "Algar de Mesa": "serrania",
+  "Algora": "alcarria",
+  "Alhóndiga": "alcarria",
+  "Alique": "alcarria",
+  "Almadrones": "alcarria",
+  "Almoguera": "alcarria",
+  "Almonacid de Zorita": "alcarria",
+  "Alocén": "alcarria",
+  "Alovera": "campina",
+  "Alustante": "senorio",
+  "Anguita": "serrania",
+  "Angón": "serrania",
+  "Anquela del Ducado": "senorio",
+  "Anquela del Pedregal": "senorio",
+  "Aranzueque": "campina",
+  "Arbancón": "campina",
+  "Arbeteta": "alcarria",
+  "Argecilla": "alcarria",
+  "Armallones": "senorio",
+  "Armuña de Tajuña": "alcarria",
+  "Arroyo de las Fraguas": "serrania",
+  "Atanzón": "alcarria",
+  "Atienza": "serrania",
+  "Auñón": "alcarria",
+  "Azuqueca de Henares": "campina",
+  "Baides": "serrania",
+  "Barriopedro": "alcarria",
+  "Baños de Tajo": "senorio",
+  "Bañuelos": "serrania",
+  "Berninches": "alcarria",
+  "Brihuega": "alcarria",
+  "Budia": "alcarria",
+  "Bujalaro": "alcarria",
+  "Bustares": "serrania",
+  "Cabanillas del Campo": "campina",
+  "Campillo de Dueñas": "senorio",
+  "Campillo de Ranas": "serrania",
+  "Campisábalos": "serrania",
+  "Canredondo": "alcarria",
+  "Cantalojas": "serrania",
+  "Casa de Uceda": "campina",
+  "Casas de San Galindo": "alcarria",
+  "Caspueñas": "alcarria",
+  "Castejón de Henares": "alcarria",
+  "Castellar de la Muela": "senorio",
+  "Castilforte": "alcarria",
+  "Castilnuevo": "senorio",
+  "Cañizar": "campina",
+  "Cendejas de Enmedio": "serrania",
+  "Cendejas de la Torre": "alcarria",
+  "Centenera": "alcarria",
+  "Checa": "senorio",
+  "Chequilla": "senorio",
+  "Chillarón del Rey": "alcarria",
+  "Chiloeches": "campina",
+  "Cifuentes": "alcarria",
+  "Cincovillas": "serrania",
+  "Ciruelas": "campina",
+  "Ciruelos del Pinar": "serrania",
+  "Cobeta": "senorio",
+  "Cogollor": "alcarria",
+  "Cogolludo": "campina",
+  "Condemios de Abajo": "serrania",
+  "Condemios de Arriba": "serrania",
+  "Congostrina": "serrania",
+  "Copernal": "alcarria",
+  "Corduente": "senorio",
+  "Driebes": "alcarria",
+  "Durón": "alcarria",
+  "El Cardoso de la Sierra": "serrania",
+  "El Casar": "campina",
+  "El Cubillo de Uceda": "campina",
+  "El Olivar": "alcarria",
+  "El Ordial": "serrania",
+  "El Pedregal": "senorio",
+  "El Pobo de Dueñas": "senorio",
+  "El Recuenco": "senorio",
+  "El Sotillo": "alcarria",
+  "Embid": "senorio",
+  "Escamilla": "alcarria",
+  "Escariche": "campina",
+  "Escopete": "alcarria",
+  "Espinosa de Henares": "alcarria",
+  "Esplegares": "senorio",
+  "Establés": "serrania",
+  "Estriégana": "serrania",
+  "Fontanar": "campina",
+  "Fuembellida": "senorio",
+  "Fuencemillán": "campina",
+  "Fuentelahiguera de Albatages": "campina",
+  "Fuentelencina": "alcarria",
+  "Fuentelsaz": "serrania",
+  "Fuentelviejo": "alcarria",
+  "Fuentenovilla": "campina",
+  "Gajanejos": "alcarria",
+  "Galve de Sorbe": "serrania",
+  "Galápagos": "campina",
+  "Gascueña de Bornova": "serrania",
+  "Guadalajara": "campina",
+  "Henche": "alcarria",
+  "Heras de Ayuso": "campina",
+  "Herrería": "senorio",
+  "Hiendelaencina": "serrania",
+  "Hijes": "serrania",
+  "Hita": "alcarria",
+  "Hombrados": "senorio",
+  "Hontoba": "alcarria",
+  "Horche": "campina",
+  "Hortezuela de Océn": "alcarria",
+  "Huertahernando": "senorio",
+  "Hueva": "alcarria",
+  "Humanes": "campina",
+  "Huérmeces del Cerro": "serrania",
+  "Illana": "alcarria",
+  "Iniéstola": "serrania",
+  "Irueste": "alcarria",
+  "Jadraque": "alcarria",
+  "Jirueque": "alcarria",
+  "La Bodera": "serrania",
+  "La Huerce": "serrania",
+  "La Mierla": "campina",
+  "La Miñosa": "serrania",
+  "La Olmeda de Jadraque": "serrania",
+  "La Toba": "serrania",
+  "La Yunta": "senorio",
+  "Las Inviernas": "alcarria",
+  "Las Navas de Jadraque": "serrania",
+  "Ledanca": "alcarria",
+  "Loranca de Tajuña": "campina",
+  "Lupiana": "alcarria",
+  "Luzaga": "alcarria",
+  "Luzón": "serrania",
+  "Majaelrayo": "serrania",
+  "Malaguilla": "campina",
+  "Mandayona": "alcarria",
+  "Mantiel": "alcarria",
+  "Maranchón": "serrania",
+  "Marchamalo": "campina",
+  "Masegoso de Tajuña": "alcarria",
+  "Matarrubia": "campina",
+  "Matillas": "alcarria",
+  "Mazarete": "senorio",
+  "Mazuecos": "alcarria",
+  "Medranda": "serrania",
+  "Megina": "senorio",
+  "Membrillera": "alcarria",
+  "Miedes de Atienza": "serrania",
+  "Millana": "alcarria",
+  "Milmarcos": "serrania",
+  "Mirabueno": "alcarria",
+  "Miralrío": "alcarria",
+  "Mochales": "serrania",
+  "Mohernando": "campina",
+  "Molina de Aragón": "senorio",
+  "Monasterio": "serrania",
+  "Mondéjar": "campina",
+  "Montarrón": "campina",
+  "Moratilla de los Meleros": "alcarria",
+  "Morenilla": "senorio",
+  "Muduex": "alcarria",
+  "Málaga del Fresno": "campina",
+  "Negredo": "serrania",
+  "Ocentejo": "senorio",
+  "Olmeda de Cobeta": "senorio",
+  "Orea": "senorio",
+  "Pardos": "senorio",
+  "Paredes de Sigüenza": "serrania",
+  "Pareja": "alcarria",
+  "Pastrana": "alcarria",
+  "Peralejos de las Truchas": "senorio",
+  "Peralveche": "alcarria",
+  "Peñalver": "alcarria",
+  "Peñalén": "senorio",
+  "Pinilla de Jadraque": "serrania",
+  "Pinilla de Molina": "senorio",
+  "Pioz": "campina",
+  "Piqueras": "senorio",
+  "Poveda de la Sierra": "senorio",
+  "Pozo de Almoguera": "alcarria",
+  "Pozo de Guadalajara": "campina",
+  "Prados Redondos": "senorio",
+  "Prádena de Atienza": "serrania",
+  "Puebla de Beleña": "campina",
+  "Puebla de Valles": "campina",
+  "Pálmaces de Jadraque": "serrania",
+  "Quer": "campina",
+  "Rebollosa de Jadraque": "serrania",
+  "Renera": "alcarria",
+  "Retiendas": "campina",
+  "Riba de Saelices": "senorio",
+  "Rillo de Gallo": "senorio",
+  "Riofrío del Llano": "serrania",
+  "Robledillo de Mohernando": "campina",
+  "Robledo de Corpes": "serrania",
+  "Romanillos de Atienza": "serrania",
+  "Romanones": "alcarria",
+  "Rueda de la Sierra": "senorio",
+  "Sacecorbo": "alcarria",
+  "Sacedón": "alcarria",
+  "Saelices de la Sal": "senorio",
+  "Salmerón": "alcarria",
+  "San Andrés del Congosto": "serrania",
+  "San Andrés del Rey": "alcarria",
+  "Santiuste": "serrania",
+  "Sayatón": "alcarria",
+  "Saúca": "serrania",
+  "Selas": "senorio",
+  "Semillas": "serrania",
+  "Setiles": "senorio",
+  "Sienes": "serrania",
+  "Sigüenza": "serrania",
+  "Solanillos del Extremo": "alcarria",
+  "Somolinos": "serrania",
+  "Sotodosos": "senorio",
+  "Tamajón": "serrania",
+  "Taragudo": "campina",
+  "Taravilla": "senorio",
+  "Tartanedo": "serrania",
+  "Tendilla": "alcarria",
+  "Terzaga": "senorio",
+  "Tierzo": "senorio",
+  "Tordellego": "senorio",
+  "Tordelrábano": "serrania",
+  "Tordesilos": "senorio",
+  "Torija": "alcarria",
+  "Torre del Burgo": "campina",
+  "Torrecuadrada de Molina": "senorio",
+  "Torrecuadradilla": "alcarria",
+  "Torrejón del Rey": "campina",
+  "Torremocha de Jadraque": "serrania",
+  "Torremocha del Campo": "alcarria",
+  "Torremocha del Pinar": "senorio",
+  "Torremochuela": "senorio",
+  "Torrubia": "senorio",
+  "Tortuera": "serrania",
+  "Tortuero": "campina",
+  "Traíd": "senorio",
+  "Trijueque": "alcarria",
+  "Trillo": "alcarria",
+  "Tórtola de Henares": "campina",
+  "Uceda": "campina",
+  "Ujados": "serrania",
+  "Utande": "alcarria",
+  "Valdarachas": "campina",
+  "Valdearenas": "alcarria",
+  "Valdeavellano": "alcarria",
+  "Valdeaveruelo": "campina",
+  "Valdeconcha": "alcarria",
+  "Valdegrudas": "alcarria",
+  "Valdelcubo": "serrania",
+  "Valdenuño Fernández": "campina",
+  "Valdepeñas de la Sierra": "campina",
+  "Valderrebollo": "alcarria",
+  "Valdesotos": "campina",
+  "Valfermoso de Tajuña": "alcarria",
+  "Valhermoso": "senorio",
+  "Valtablado del Río": "senorio",
+  "Valverde de los Arroyos": "serrania",
+  "Viana de Jadraque": "serrania",
+  "Villanueva de Alcorón": "senorio",
+  "Villanueva de Argecilla": "alcarria",
+  "Villanueva de la Torre": "campina",
+  "Villares de Jadraque": "serrania",
+  "Villaseca de Henares": "alcarria",
+  "Villaseca de Uceda": "campina",
+  "Villel de Mesa": "serrania",
+  "Viñuelas": "campina",
+  "Yebes": "campina",
+  "Yebra": "alcarria",
+  "Yunquera de Henares": "campina",
+  "Yélamos de Abajo": "alcarria",
+  "Yélamos de Arriba": "alcarria",
+  "Zaorejas": "senorio",
+  "Zarzuela de Jadraque": "serrania",
+  "Zorita de los Canes": "alcarria"
+};
+
+// Define colours for each comarca. Choose distinct hues so they are easily
+// distinguishable when drawn as strokes. Users can still customise the
+// fill colours via the UI. The keys correspond to the values of
+// municipioToComarca. If you wish to change the palette, adjust the
+// hexadecimal codes here.
+const comarcaColours = {
+  serrania: '#e41a1c', // Serranía de Guadalajara (red)
+  senorio: '#377eb8',  // Señorío de Molina (blue)
+  campina: '#ff7f00',  // Campiña de Guadalajara (orange)
+  alcarria: '#4daf4a'  // La Alcarria (green)
+};
+
+// Apply comarca stroke colours to all municipalities. This runs on load and
+// whenever the style is updated. It uses municipioToComarca to look up
+// the comarca for each municipality name. If a municipality is not found
+// in the dictionary, it falls back to a default stroke colour. The stroke
+// width remains controlled by the global strokeWidth variable.
+function applyComarcaColours() {
+  document.querySelectorAll('#municipios path').forEach(function(el) {
+    const name = el.getAttribute('data-name');
+    const comarca = municipioToComarca[name];
+    if (comarca && comarcaColours[comarca]) {
+      el.setAttribute('stroke', comarcaColours[comarca]);
+    } else {
+      el.setAttribute('stroke', '#333333');
+    }
+    el.setAttribute('stroke-width', strokeWidth);
+  });
+  // If a municipality is highlighted from a search, preserve its highlight
+  if (highlightedElement) {
+    highlightedElement.setAttribute('stroke', '#FFA500');
+    highlightedElement.setAttribute('stroke-width', strokeWidth + 0.5);
+  }
+}
+
+// Build the legend for comarcas. Populates the #legend div with coloured
+// swatches and labels describing each comarca. Call this after applying
+// comarca colours so the legend reflects the current palette.
+function buildLegend() {
+  const legend = document.getElementById('legend');
+  if (!legend) return;
+  legend.innerHTML = '';
+  Object.keys(comarcaColours).forEach(function(key) {
+    const colour = comarcaColours[key];
+    const item = document.createElement('div');
+    item.style.display = 'flex';
+    item.style.alignItems = 'center';
+    const swatch = document.createElement('span');
+    swatch.style.backgroundColor = colour;
+    swatch.style.width = '12px';
+    swatch.style.height = '12px';
+    swatch.style.display = 'inline-block';
+    swatch.style.marginRight = '4px';
+    const label = document.createElement('span');
+    // Capitalise first letter for display
+    label.textContent = key.charAt(0).toUpperCase() + key.slice(1);
+    item.appendChild(swatch);
+    item.appendChild(label);
+    legend.appendChild(item);
+  });
+}
+
 // Control de visibilidad de etiquetas. Se actualiza desde el botón de
 // mostrar/ocultar etiquetas.
 let labelsVisible = true;
@@ -785,6 +1168,8 @@ function updateStyle() {
     highlightedElement.setAttribute('stroke', '#FFA500');
     highlightedElement.setAttribute('stroke-width', strokeWidth + 0.5);
   }
+  // Reaplicar los colores de comarca con el nuevo grosor
+  applyComarcaColours();
 }
 
 // Alterna la visibilidad de las etiquetas de los municipios. Actualiza
@@ -895,6 +1280,8 @@ function loadVisited() {
   }
   // Actualiza el contador de progreso después de cargar visitas
   updateProgress();
+  // Reaplicar colores de comarca en caso de que el load haya cambiado
+  applyComarcaColours();
 }
 
 // Allow exporting the current visited state to a JSON file. The user can
@@ -1034,6 +1421,8 @@ loadVisited();
 // Al iniciar, actualiza el contador y aplica el estilo por defecto
 updateProgress();
 updateStyle();
+// Construye la leyenda de comarcas una vez que se han aplicado los colores
+buildLegend();
 
 // Generar lista de opciones para autocompletado de municipios. Esta función
 // crea un elemento <datalist> con todas las localidades y lo inserta en
@@ -1055,6 +1444,34 @@ updateStyle();
   });
   const controls = document.getElementById('controls') || document.body;
   controls.appendChild(dataList);
+})();
+
+// Import visits from the URL if present. If the URL contains a
+// parameter "v" with a base64‑encoded JSON array of municipality names,
+// decode it and mark those municipalities as visited. This allows
+// sharing progress via a link. The import from URL happens before
+// reading from localStorage so that shared links override any saved state.
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const encoded = params.get('v');
+  if (!encoded) return;
+  try {
+    const jsonString = decodeURIComponent(atob(encoded));
+    const list = JSON.parse(jsonString);
+    if (Array.isArray(list)) {
+      const visitedSet = new Set(list);
+      document.querySelectorAll('#municipios path').forEach(function(el) {
+        const name = el.getAttribute('data-name');
+        const isVisited = visitedSet.has(name);
+        el.setAttribute('data-visited', isVisited);
+        el.setAttribute('fill', isVisited ? visitedColour : unvisitedColour);
+      });
+      // Persist this imported state so subsequent loads retain it
+      saveVisited();
+    }
+  } catch (e) {
+    console.warn('No se pudieron importar visitas desde la URL:', e);
+  }
 })();
 
 // Ajustar la posición de las etiquetas para los municipios que tienen varias
@@ -1130,22 +1547,31 @@ if ('serviceWorker' in navigator) {
   });
 }
 function exportImage() {
+  // Generate a PNG of the complete map at high resolution, regardless of the current
+  // zoom/pan state. We clone the SVG and reset its viewBox to the original
+  // dimensions stored in the data-original-viewbox attribute so the entire map
+  // is exported instead of only the visible portion.
   const svg = document.getElementById('svgMap');
+  const originalViewBox = svg.getAttribute('data-original-viewbox') || svg.getAttribute('viewBox');
+  // Clone the SVG so we can modify it without affecting the displayed map
+  const clonedSvg = svg.cloneNode(true);
+  clonedSvg.setAttribute('viewBox', originalViewBox);
   const serializer = new XMLSerializer();
-  const svgString = serializer.serializeToString(svg);
+  const svgString = serializer.serializeToString(clonedSvg);
   const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
   const url = URL.createObjectURL(blob);
   const img = new Image();
   img.onload = function() {
-    // To generate a higher resolution image we create a larger canvas and scale
-    // the drawing context accordingly. Increasing the scale factor increases
-    // the output size while preserving detail in the labels and boundaries.
+    // Parse the original viewBox to determine the natural width and height of the SVG
+    const parts = originalViewBox.split(/\s+/).map(parseFloat);
+    const origWidth = parts[2];
+    const origHeight = parts[3];
     const canvas = document.createElement('canvas');
-    const scaleFactor = 4; // export at 4× the original resolution
-    canvas.width = svg.viewBox.baseVal.width * scaleFactor;
-    canvas.height = svg.viewBox.baseVal.height * scaleFactor;
+    // Increase the scale factor for higher resolution exports; adjust as desired
+    const scaleFactor = 6; // export at 6× the original resolution for crisp labels
+    canvas.width = origWidth * scaleFactor;
+    canvas.height = origHeight * scaleFactor;
     const ctx = canvas.getContext('2d');
-    // Scale the context so the SVG is drawn larger on the canvas
     ctx.scale(scaleFactor, scaleFactor);
     ctx.drawImage(img, 0, 0);
     URL.revokeObjectURL(url);
@@ -1156,6 +1582,74 @@ function exportImage() {
     link.click();
   };
   img.src = url;
+}
+
+// Export the current map as a standalone SVG file. The exported SVG retains
+// all municipality shapes, colours and stroke settings at the moment of
+// export. It resets the viewBox to the original dimensions so that the
+// entire province is included regardless of the current zoom/pan state.
+function exportSVG() {
+  const svg = document.getElementById('svgMap');
+  const originalViewBox = svg.getAttribute('data-original-viewbox') || svg.getAttribute('viewBox');
+  // Clone the SVG to avoid mutating the displayed map
+  const clonedSvg = svg.cloneNode(true);
+  clonedSvg.setAttribute('viewBox', originalViewBox);
+  // Remove any elements that are not part of the map (e.g. <defs> used by pan/zoom libraries)
+  // Also ensure XML namespaces are declared on the root element
+  clonedSvg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  clonedSvg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+  // Serialize the cloned SVG
+  const serializer = new XMLSerializer();
+  let svgString = serializer.serializeToString(clonedSvg);
+  // Ensure the XML declaration is at the top for standalone files
+  if (!svgString.startsWith('<?xml')) {
+    svgString = '<?xml version="1.0" encoding="UTF-8"?>\n' + svgString;
+  }
+  const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'mapa_municipios_visitados.svg';
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+// Share the current progress by encoding the list of visited municipalities
+// into the URL. This function builds a link containing a "v" parameter
+// with a base64‑encoded JSON array of municipality names. It attempts to
+// use the Web Share API to send the link if available; otherwise it copies
+// the link to the clipboard and informs the user.
+function shareProgress() {
+  // Collect visited names (unique)
+  const visitedSet = new Set();
+  document.querySelectorAll('#municipios path[data-visited="true"]').forEach(function(el) {
+    const name = el.getAttribute('data-name');
+    if (name) visitedSet.add(name);
+  });
+  const visitedList = Array.from(visitedSet);
+  // Encode the list as base64 to fit in a URL parameter
+  const jsonString = JSON.stringify(visitedList);
+  const base64 = btoa(unescape(encodeURIComponent(jsonString)));
+  const baseUrl = window.location.origin + window.location.pathname;
+  const shareUrl = `${baseUrl}?v=${encodeURIComponent(base64)}`;
+  // Try to use the Web Share API if supported
+  if (navigator.share) {
+    navigator.share({
+      title: 'Mi progreso de visitas en Guadalajara',
+      text: 'Consulta mis municipios visitados en Guadalajara:',
+      url: shareUrl
+    }).catch(function(err) {
+      console.warn('No se pudo compartir:', err);
+    });
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(shareUrl).then(function() {
+      alert('Enlace copiado al portapapeles. Compártelo con quien quieras.');
+    }).catch(function() {
+      alert('No se pudo copiar el enlace. Aquí está para que lo copies manualmente:\n' + shareUrl);
+    });
+  } else {
+    alert('Aquí está el enlace para compartir tu progreso:\n' + shareUrl);
+  }
 }
 
 // Initialise zoom and pan once the page has fully loaded and the svg-pan-zoom
@@ -1224,6 +1718,24 @@ function exportImage() {
   });
   window.addEventListener('mouseup', function() {
     isPanning = false;
+  });
+
+  // Double click (or double tap on touchscreen when converted to a dblclick event)
+  // to zoom in quickly. It zooms by a factor of 0.5 relative to the
+  // clicked position.
+  svg.addEventListener('dblclick', function(event) {
+    event.preventDefault();
+    const svgRect = svg.getBoundingClientRect();
+    const mouseX = event.clientX - svgRect.left;
+    const mouseY = event.clientY - svgRect.top;
+    const svgMX = viewBox.x + (mouseX / svgRect.width) * viewBox.w;
+    const svgMY = viewBox.y + (mouseY / svgRect.height) * viewBox.h;
+    // Zoom in by reducing the viewBox dimensions
+    viewBox.w *= 0.5;
+    viewBox.h *= 0.5;
+    viewBox.x = svgMX - (mouseX / svgRect.width) * viewBox.w;
+    viewBox.y = svgMY - (mouseY / svgRect.height) * viewBox.h;
+    applyViewBox();
   });
   // Touch support: handle one finger panning and two finger pinch zoom.
   let pinchStartDist = 0;
