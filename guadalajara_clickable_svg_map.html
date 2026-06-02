@@ -28,10 +28,7 @@
   button:active { transform: scale(0.98); opacity: 0.82; }
   input[type='text'] { width: min(88vw, 320px); border: 1px solid #d1d1d6; border-radius: 999px; padding: 10px 14px; font-size: 16px; outline: none; background: #ffffff; }
   input[type='text']:focus { border-color: var(--ios-blue); box-shadow: 0 0 0 3px rgba(0,122,255,0.16); }
-  #legend { margin: 6px auto 8px; display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 12px; font-size: 12px; width: min(96vw, 900px); }
-  .legend-item { display: inline-flex; align-items: center; gap: 5px; background: #f8f8f8; border-radius: 999px; padding: 4px 8px; }
-  .legend-line { width: 18px; height: 0; border-top: 3px solid currentColor; display: inline-block; }
-  @media (max-width: 600px) { h1 { margin-top: 8px; } #controlsContainer { position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%); z-index: 1000; margin: 0; width: calc(100vw - 16px); max-height: 54vh; overflow-y: auto; padding-bottom: env(safe-area-inset-bottom); } #controlsPanel { background: rgba(255,255,255,0.96); border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.18); } #mapContainer { margin-bottom: 74px; } #controlsContainer[open] ~ #legend + #mapContainer { margin-bottom: 210px; } button { padding: 9px 12px; font-size: 14px; } }
+  @media (max-width: 600px) { h1 { margin-top: 8px; } #controlsContainer { position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%); z-index: 1000; margin: 0; width: calc(100vw - 16px); max-height: 54vh; overflow-y: auto; padding-bottom: env(safe-area-inset-bottom); } #controlsPanel { background: rgba(255,255,255,0.96); border: 1px solid rgba(0,0,0,0.08); box-shadow: 0 10px 30px rgba(0,0,0,0.18); } #mapContainer { margin-bottom: 74px; } #controlsContainer[open] ~ #mapContainer { margin-bottom: 210px; } button { padding: 9px 12px; font-size: 14px; } }
 </style>
 </head>
 <body>
@@ -51,12 +48,7 @@
     </div>
   </div>
 </details>
-<div id='legend'>
-  <span class='legend-item' style='color:#D70015'><span class='legend-line'></span>Serranía</span>
-  <span class='legend-item' style='color:#007AFF'><span class='legend-line'></span>Señorío</span>
-  <span class='legend-item' style='color:#FF9500'><span class='legend-line'></span>Campiña</span>
-  <span class='legend-item' style='color:#AF52DE'><span class='legend-line'></span>Alcarria</span>
-</div>
+
 <div id='mapContainer'>
 <svg id='svgMap' width='800' height='468' viewBox='0 0 800 468' data-original-viewbox='0 0 800 468' xmlns='http://www.w3.org/2000/svg'>
   <g id='municipios'>
@@ -369,12 +361,6 @@
     <path d='M286.59,64.43L286.83,64.39L287.07,64.31L287.50,64.03L287.96,63.49L288.70,62.91L289.18,62.26L289.54,61.42L289.62,61.05L289.82,60.70L290.46,59.90L290.27,59.01L290.26,58.77L291.15,58.70L291.82,58.55L292.68,58.10L294.26,57.62L295.41,57.46L295.74,57.33L296.94,57.07L297.72,56.86L299.08,56.58L298.80,56.01L298.64,55.37L298.61,54.97L298.66,54.53L297.55,52.21L296.80,51.05L296.31,50.08L296.19,49.28L296.16,48.40L295.71,47.31L295.04,45.35L294.61,44.22L294.36,43.37L293.80,42.18L293.38,41.42L293.09,40.96L292.03,40.69L291.83,40.67L291.29,40.84L289.68,41.48L288.98,41.70L288.52,41.90L287.82,42.15L287.39,42.36L286.49,42.88L285.58,43.54L284.35,42.71L283.99,42.59L281.36,43.70L280.57,44.00L279.55,44.35L279.60,44.68L279.70,44.94L280.10,45.51L280.16,45.78L280.17,46.03L280.12,46.36L279.65,47.62L279.18,49.03L280.23,49.44L280.43,49.93L280.69,50.73L280.91,51.52L281.13,52.16L282.02,54.17L282.07,55.04L282.44,57.00L282.10,58.52L282.48,58.86L283.06,59.55L283.18,59.75L283.47,60.58L283.76,61.15L284.26,61.79L284.70,61.72L284.75,61.77L286.31,64.05L286.46,64.13L286.47,64.33L286.59,64.43Z' fill='#F7F7F7' stroke='#D0D0D0' stroke-width='0.25' data-name='Cincovillas' data-visited='false' style='cursor:pointer'></path>
   </g>
 
-  <g id='comarcaBorders' fill='none' stroke-linejoin='round' pointer-events='none'>
-    <path d='M253.08,0.0 L133.14,9.32 L50.24,21.68 L0.55,64.75 L0.0,70.87 L20.86,92.91 L40.75,113.48 L58.5,130.37 L129.97,152.81 L419.01,167.14 L694.51,156.43 L718.69,153.84 L719.16,153.63 L719.39,153.49 L728.54,125.67 L711.4,108.54 L706.77,104.34 L706.35,104.01 L693.26,94.64 L634.43,63.22 L631.11,61.79 L260.36,0.95 L253.08,0.0 Z' stroke='#D70015' stroke-width='2.1' />
-    <path d='M546.06,121.14 L536.79,122.18 L460.63,151.76 L444.99,159.82 L444.75,160.04 L440.89,164.65 L440.25,165.47 L440.02,165.88 L437.95,243.27 L455.7,284.29 L456.17,284.71 L471.21,297.48 L471.6,297.81 L473.46,299.24 L473.99,299.64 L477.76,301.96 L691.4,370.01 L692.22,370.24 L692.28,370.22 L700.35,364.17 L792.0,295.35 L796.06,291.68 L800.0,255.12 L798.56,213.05 L798.1,210.11 L797.33,205.66 L796.39,203.67 L769.6,155.34 L767.36,152.88 L749.99,139.11 L747.83,137.75 L728.54,125.67 L546.06,121.14 Z' stroke='#007AFF' stroke-width='2.1' />
-    <path d='M136.8,119.62 L89.18,125.05 L58.5,130.37 L57.57,130.82 L48.99,135.43 L32.12,167.65 L11.78,214.7 L28.94,253.96 L143.87,408.74 L170.9,415.03 L172.19,415.14 L179.29,414.16 L180.99,413.58 L182.5,412.69 L185.41,409.47 L189.43,403.95 L203.6,383.61 L203.93,382.88 L205.22,379.86 L206.13,377.27 L223.25,279.19 L203.08,153.77 L202.99,153.39 L193.22,131.37 L191.91,129.97 L190.9,128.92 L189.82,128.28 L186.37,126.42 L177.54,123.35 L175.42,122.95 L136.8,119.62 Z' stroke='#FF9500' stroke-width='2.1' />
-    <path d='M374.12,126.63 L276.6,129.16 L219.82,136.56 L207.97,139.8 L200.67,145.51 L198.18,147.46 L169.25,172.21 L168.7,172.84 L168.63,173.01 L168.56,173.29 L137.18,426.15 L138.28,429.94 L144.68,434.63 L188.79,465.83 L209.26,468.0 L251.16,466.16 L253.81,465.83 L254.35,465.69 L260.69,463.15 L286.16,447.8 L409.72,359.48 L409.98,359.28 L463.17,312.24 L485.63,260.32 L484.85,202.84 L484.82,202.7 L484.1,200.23 L484.0,199.93 L461.45,138.67 L450.28,132.63 L440.96,128.1 L375.06,126.65 L374.12,126.63 Z' stroke='#AF52DE' stroke-width='2.1' />
-  </g>
   <g id='labels'>
     <text x='449.61' y='199.26' font-size='4' fill='#000000' text-anchor='middle' alignment-baseline='central' pointer-events='none'>Sacecorbo</text>
     <text x='147.74' y='74.74' font-size='4' fill='#000000' text-anchor='middle' alignment-baseline='central' pointer-events='none'>La Huerce</text>
